@@ -53,6 +53,11 @@ public class TrimVideo {
             return this;
         }
 
+        public ActivityBuilder setBypassPermissionsCheck(final boolean bypass) {
+            options.bypassPermissionsCheck = bypass;
+            return this;
+        }
+
         public ActivityBuilder setCompressOption(final CompressOption compressOption) {
             options.compressOption = compressOption;
             return this;
