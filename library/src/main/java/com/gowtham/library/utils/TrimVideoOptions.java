@@ -12,6 +12,8 @@ public class TrimVideoOptions {
 
     public boolean accurateCut;
 
+    public boolean bypassPermissionsCheck = false;
+
     public boolean showFileLocationAlert;
 
     public long[] minToMax;
