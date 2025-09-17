@@ -53,6 +53,11 @@ public class TrimVideo {
             return this;
         }
 
+        public ActivityBuilder setBypassPermissionsCheck(final boolean bypass) {
+            options.bypassPermissionsCheck = bypass;
+            return this;
+        }
+
         public ActivityBuilder setFileName(@NonNull final String fileName) {
             options.fileName = fileName;
             return this;
