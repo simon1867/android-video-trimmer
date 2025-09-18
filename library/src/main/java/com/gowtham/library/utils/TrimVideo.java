@@ -2,6 +2,7 @@ package com.gowtham.library.utils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -70,6 +71,12 @@ public class TrimVideo {
 
         public ActivityBuilder setGranularity(TrimGranularity granularity) {
             options.granularity = granularity;
+            return this;
+        }
+
+        public ActivityBuilder setToolbarColor(int color, boolean isLight) {
+            options.toolbarColor = color;
+            options.isLightStatusBar = isLight;
             return this;
         }
 

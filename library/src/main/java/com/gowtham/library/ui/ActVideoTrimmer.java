@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.net.Uri;
@@ -34,6 +35,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.akexorcist.localizationactivity.ui.LocalizationActivity;
 import com.bumptech.glide.Glide;
@@ -165,7 +167,7 @@ public class ActVideoTrimmer extends LocalizationActivity {
         Gson gson = new Gson();
         String videoOption = bundle.getString(TrimVideo.TRIM_VIDEO_OPTION);
         trimVideoOptions = gson.fromJson(videoOption, TrimVideoOptions.class);
-        setUpToolBar(getSupportActionBar(), trimVideoOptions.title);
+        setUpToolBar(toolbar, getSupportActionBar(), trimVideoOptions);
         toolbar.setNavigationOnClickListener(v -> finish());
         progressView = new CustomProgressView(this);
     }
@@ -203,11 +205,22 @@ public class ActVideoTrimmer extends LocalizationActivity {
         }
     }
 
-    private void setUpToolBar(ActionBar actionBar, String title) {
+    private void setUpToolBar(Toolbar toolbar, ActionBar actionBar, TrimVideoOptions options) {
         try {
+            String title = options.title;
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setTitle(title != null ? title : getString(R.string.txt_edt_video));
+
+            if (options.toolbarColor != null) {
+                toolbar.setBackgroundColor(options.toolbarColor);
+                getWindow().setStatusBarColor(options.toolbarColor);
+
+                WindowInsetsControllerCompat c = new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView());
+                c.setAppearanceLightStatusBars(options.isLightStatusBar);
+
+                findViewById(R.id.root_view).setBackgroundColor(options.toolbarColor);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
