@@ -81,8 +81,4 @@ object FileUtilKt {
             cursor?.close()
         }
     }
-
-
-    
-
 }

@@ -22,6 +22,8 @@ public class TrimVideoOptions {
 
     public String local;
 
+    public TrimGranularity granularity;
+
     public TrimVideoOptions() {
     }
 
