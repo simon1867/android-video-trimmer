@@ -68,6 +68,11 @@ public class TrimVideo {
             return this;
         }
 
+        public ActivityBuilder setGranularity(TrimGranularity granularity) {
+            options.granularity = granularity;
+            return this;
+        }
+
         public ActivityBuilder setAccurateCut(final boolean accurate) {
             options.accurateCut = accurate;
             return this;

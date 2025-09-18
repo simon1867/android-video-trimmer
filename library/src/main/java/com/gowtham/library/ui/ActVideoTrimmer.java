@@ -58,6 +58,7 @@ import com.gowtham.library.utils.CustomProgressView;
 import com.gowtham.library.utils.FileUtilKt;
 import com.gowtham.library.utils.LocaleHelper;
 import com.gowtham.library.utils.LogMessage;
+import com.gowtham.library.utils.TrimGranularity;
 import com.gowtham.library.utils.TrimVideo;
 import com.gowtham.library.utils.TrimVideoOptions;
 import com.gowtham.library.utils.TrimmerUtils;
@@ -99,9 +100,9 @@ public class ActVideoTrimmer extends LocalizationActivity {
 
     private CrystalRangeSeekbar seekbar;
 
-    private long lastMinValue = 0;
+    private double lastMinValue = 0;
 
-    private long lastMaxValue = 0;
+    private double lastMaxValue = 0;
 
     private MenuItem menuDone;
 
@@ -142,6 +143,7 @@ public class ActVideoTrimmer extends LocalizationActivity {
     private int trimType;
     private long fixedGap, minGap, minFromGap, maxToGap;
     private boolean hidePlayerSeek, showFileLocationAlert;
+    private TrimGranularity granularity = TrimGranularity.COURSE;
     private CustomProgressView progressView;
     private String fileName;
 
@@ -266,6 +268,7 @@ public class ActVideoTrimmer extends LocalizationActivity {
             hidePlayerSeek = trimVideoOptions.hideSeekBar;
             local = trimVideoOptions.local;
             showFileLocationAlert = trimVideoOptions.showFileLocationAlert;
+            granularity = trimVideoOptions.granularity != null ? trimVideoOptions.granularity : TrimGranularity.COURSE;
             fixedGap = trimVideoOptions.fixedDuration;
             fixedGap = fixedGap != 0 ? fixedGap : totalDuration;
             minGap = trimVideoOptions.minDuration;
@@ -297,9 +300,10 @@ public class ActVideoTrimmer extends LocalizationActivity {
         }
     }
 
-    private void seekTo(long sec) {
-        if (videoPlayer != null)
-            videoPlayer.seekTo(sec * 1000);
+    private void seekTo(double sec) {
+        if (videoPlayer != null) {
+            videoPlayer.seekTo((int) (sec * 1000));
+        }
     }
 
     private void buildMediaSource() {
@@ -379,6 +383,8 @@ public class ActVideoTrimmer extends LocalizationActivity {
         seekbarController.setMaxValue(totalDuration).apply();
         seekbar.setMaxValue(totalDuration).apply();
         seekbar.setMaxStartValue((float) totalDuration).apply();
+        seekbar.setDataType(granularity == TrimGranularity.COURSE ? CrystalRangeSeekbar.DataType.INTEGER : CrystalRangeSeekbar.DataType.DOUBLE);
+
         if (trimType == 1) {
             seekbar.setFixGap(fixedGap).apply();
             lastMaxValue = totalDuration;
@@ -403,23 +409,23 @@ public class ActVideoTrimmer extends LocalizationActivity {
         });
 
         seekbar.setOnRangeSeekbarChangeListener((minValue, maxValue) -> {
-            long minVal = (long) minValue;
-            long maxVal = (long) maxValue;
+            double minVal = minValue.doubleValue();
+            double maxVal = maxValue.doubleValue();
             if (lastMinValue != minVal) {
-                seekTo((long) minValue);
+                seekTo(minValue.longValue());
                 if (!hidePlayerSeek)
                     seekbarController.setVisibility(View.INVISIBLE);
             }
             lastMinValue = minVal;
             lastMaxValue = maxVal;
-            txtStartDuration.setText(TrimmerUtils.formatSeconds(minVal));
-            txtEndDuration.setText(TrimmerUtils.formatSeconds(maxVal));
+            txtStartDuration.setText(TrimmerUtils.formatSeconds(Math.round(minVal)));
+            txtEndDuration.setText(TrimmerUtils.formatSeconds(Math.round(maxVal)));
             if (trimType == 3)
-                setDoneColor(minVal, maxVal);
+                setDoneColor(Math.round(minVal), Math.round(maxVal));
         });
 
         seekbarController.setOnSeekbarFinalValueListener(value -> {
-            long value1 = (long) value;
+            double value1 = value.doubleValue();
             if (value1 < lastMaxValue && value1 > lastMinValue) {
                 seekTo(value1);
                 return;
@@ -568,8 +574,8 @@ public class ActVideoTrimmer extends LocalizationActivity {
         }
 
         MediaRange mediaRange = new MediaRange(
-                lastMinValue * 1000000L, // start in microseconds
-                lastMaxValue * 1000000L // end in microseconds
+                (long) (lastMinValue * 1000000.0), // start in microseconds
+                (long) (lastMaxValue * 1000000.0) // end in microseconds
         );
 
         TransformationListener transformationListener = new TransformationListener() {

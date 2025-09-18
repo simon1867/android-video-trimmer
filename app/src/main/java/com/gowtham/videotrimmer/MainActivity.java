@@ -35,6 +35,7 @@ import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.gowtham.library.utils.LogMessage;
+import com.gowtham.library.utils.TrimGranularity;
 import com.gowtham.library.utils.TrimType;
 import com.gowtham.library.utils.TrimVideo;
 
@@ -142,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void openTrimActivity(String data) {
         if (trimType == 0) {
             TrimVideo.activity(data)
+                    .setGranularity(TrimGranularity.FINE)
                     .start(this, videoTrimResultLauncher);
         } else if (trimType == 1) {
             TrimVideo.activity(data)
@@ -159,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             TrimVideo.activity(data)
                     .setTrimType(TrimType.MIN_MAX_DURATION)
                     .setLocal("en")
+                    .setGranularity(TrimGranularity.FINE)
                     .setMinToMax(getEdtValueLong(edtMinFrom), getEdtValueLong(edtMAxTo))
                     .start(this, videoTrimResultLauncher);
         }
