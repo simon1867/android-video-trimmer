@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (trimType == 0) {
             TrimVideo.activity(data)
                     .setGranularity(TrimGranularity.FINE)
+                    .setToolbarColor(Color.GRAY, false)
                     .start(this, videoTrimResultLauncher);
         } else if (trimType == 1) {
             TrimVideo.activity(data)

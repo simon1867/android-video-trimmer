@@ -1,5 +1,7 @@
 package com.gowtham.library.utils;
 
+import android.graphics.Color;
+
 public class TrimVideoOptions {
 
     public String fileName;
@@ -23,6 +25,10 @@ public class TrimVideoOptions {
     public String local;
 
     public TrimGranularity granularity;
+
+    public Integer toolbarColor;
+
+    public boolean isLightStatusBar = true;
 
     public TrimVideoOptions() {
     }
